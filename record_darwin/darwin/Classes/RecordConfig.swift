@@ -67,12 +67,15 @@ public class Device {
   }
 }
 
-struct IosConfig {}
+
+struct IosConfig {
+  #if os(iOS)
+  let audioCategories: [AVAudioSession.CategoryOptions]
+  #endif
+}
 
 #if os(iOS)
 extension IosConfig {
-    let audioCategories: [AVAudioSession.CategoryOptions]
-
     init(map: [String: Any]) {
       let comps = map["audioCategories"] as? String
       let options: [AVAudioSession.CategoryOptions]? = comps?.split(separator: ",").compactMap {
