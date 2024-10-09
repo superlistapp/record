@@ -186,9 +186,11 @@ public class SwiftRecordPlugin: NSObject, FlutterPlugin {
     }
 
     var iosConfig: IosConfig? = nil
+#if os(iOS)
     if let iosConfigMap = args["iosConfig"] as? [String : Any] {
       iosConfig = IosConfig(map: iosConfigMap)
     }
+#endif
 
     let config = RecordConfig(
       encoder: encoder,

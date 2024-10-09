@@ -67,32 +67,36 @@ public class Device {
   }
 }
 
-struct IosConfig {
-  let audioCategories: [AVAudioSession.CategoryOptions]
+struct IosConfig {}
 
-  init(map: [String: Any]) {
-    let comps = map["audioCategories"] as? String
-    let options: [AVAudioSession.CategoryOptions]? = comps?.split(separator: ",").compactMap {
-      switch $0 {
-      case "mixWithOthers":
-          .mixWithOthers
-      case "duckOthers":
-          .duckOthers
-      case "allowBluetooth":
-          .allowBluetooth
-      case "defaultToSpeaker":
-          .defaultToSpeaker
-      case "interruptSpokenAudioAndMixWithOthers":
-          .interruptSpokenAudioAndMixWithOthers
-      case "allowBluetoothA2DP":
-          .allowBluetoothA2DP
-      case "allowAirPlay":
-          .allowAirPlay
-      case "overrideMutedMicrophoneInterruption":
-        if #available(iOS 14.5, *) { .overrideMutedMicrophoneInterruption } else { nil }
-      default: nil
+#if os(iOS)
+extension IosConfig {
+    let audioCategories: [AVAudioSession.CategoryOptions]
+
+    init(map: [String: Any]) {
+      let comps = map["audioCategories"] as? String
+      let options: [AVAudioSession.CategoryOptions]? = comps?.split(separator: ",").compactMap {
+        switch $0 {
+        case "mixWithOthers":
+            .mixWithOthers
+        case "duckOthers":
+            .duckOthers
+        case "allowBluetooth":
+            .allowBluetooth
+        case "defaultToSpeaker":
+            .defaultToSpeaker
+        case "interruptSpokenAudioAndMixWithOthers":
+            .interruptSpokenAudioAndMixWithOthers
+        case "allowBluetoothA2DP":
+            .allowBluetoothA2DP
+        case "allowAirPlay":
+            .allowAirPlay
+        case "overrideMutedMicrophoneInterruption":
+          if #available(iOS 14.5, *) { .overrideMutedMicrophoneInterruption } else { nil }
+        default: nil
+        }
       }
+      self.audioCategories = options ?? []
     }
-    self.audioCategories = options ?? []
-  }
 }
+#endif
